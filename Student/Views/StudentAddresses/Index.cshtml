@@ -6,21 +6,23 @@
     var pagedList = (IPagedList)Model;
 }
 
-<h2>List of Addresses</h2>
+<h2 style="text-align:center;">List of Addresses</h2>
 
 @using (Html.BeginForm("Index", "StudentAddresses", FormMethod.Get))
 {
-    <form>
-        <input type="text" placeholder="Search" name="searchQuery" value="@ViewBag.SearchQuery" />
-        <button type="submit">Search!</button>
-    </form>
+    <div class="col-lg-offset-8 form-inline" style="margin-left:350px;">
+        <input type="text" class="form-control" placeholder="Search" name="searchQuery" value="@ViewBag.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Search!</button>
+    </div>
+    <br />
 }
 
+    <div style="margin-left:350px;">
+        <a class="btn btn-primary" href="@Url.Action("Create","StudentAddresses")">Create New</a>
+    </div>
 
-<a class="btn btn-primary" href="@Url.Action("Create","StudentAddresses")">Create New</a>
 
-
-<table class="table">
+<table class="table" style="margin-left:100px;">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Student.StudentName)
@@ -84,3 +86,7 @@
     }
 
 </table>
+<div style="margin-left:350px">
+    Page @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) of @pagedList.PageCount
+    @Html.PagedListPager(pagedList, page => Url.Action("Index", new { page, searchQuery = ViewBag.SearchQuery }))
+</div>

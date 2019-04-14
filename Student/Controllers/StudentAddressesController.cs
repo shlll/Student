@@ -30,7 +30,8 @@ namespace Student.Controllers
                 || p.Country.Contains(searchQuery)
                 || p.State.Contains(searchQuery));
             }
-            var studentAddresses = postQuery.ToPagedList(pageNumber, pageSize);
+          
+            var studentAddresses = postQuery.ToPagedList(pageNumber ,pageSize);
             return View(studentAddresses);
         }
 

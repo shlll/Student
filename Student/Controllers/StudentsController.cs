@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using Student.Models;
 
 namespace Student.Controllers
@@ -15,11 +16,21 @@ namespace Student.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Students
-        public ActionResult Index(string searchQuery)
+        public ActionResult Index(int? page, string searchQuery)
         {
             ViewBag.SearchQuery = searchQuery;
-            var students = db.Students.Include(s => s.User);
-            return View(students.ToList());
+            int pageSize = 2; // display three blog posts at a time on this page
+            int pageNumber = (page ?? 1);
+            var postQuery = db.Students.OrderBy(p => p.StudentName).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                postQuery = postQuery.Where(p => p.StudentName.Contains(searchQuery)
+                || p.UserId.Contains(searchQuery));
+            }
+            
+            var student = postQuery.ToPagedList(pageNumber, pageSize);
+          
+            return View(student);
         }
 
         // GET: Students/Details/5
